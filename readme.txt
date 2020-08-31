@@ -8,8 +8,6 @@ pip install Pillow
 https://www.lfd.uci.edu/~gohlke/pythonlibs/#gdal
 
 
-
-
 Activate
 Set-ExecutionPolicy Unrestricted -Scope Process
 .\venv\Scripts\activate
