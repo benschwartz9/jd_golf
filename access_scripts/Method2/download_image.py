@@ -85,9 +85,5 @@ def sample(collection, time_range, area):
 
 
 composite_site = sample(collection_site, time_range_site, area_site)
-print(1)
 region_site = get_region(area_site)
-print(2)
 url_site = get_url('bottom_golf_0.15', composite_site, 0.20, region_site)
-
-print(url_site)
