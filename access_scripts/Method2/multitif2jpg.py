@@ -5,7 +5,7 @@ import cv2
 
 # Method 2, takes multiple tiff files and converts to a single JPG
 
-file_name = "golf_1"#"bottom_golf_0.6"
+file_name = "/Users/ben/Downloads/JD_TEMP/image_grab/image_grab"#"bottom_golf_0.6"
 
 
 def saveAsSimpleImage(infile):
@@ -22,15 +22,15 @@ def saveAsSimpleImage(infile):
 
 
 
-with rio.open(f'{file_name}/{file_name}.R.tif') as infile:
+with rio.open(f'{file_name}.R.tif') as infile:
     mask = infile.read(1)
     red = mask.astype(np.uint16)
 
-with rio.open(f'{file_name}/{file_name}.B.tif') as infile:
+with rio.open(f'{file_name}.B.tif') as infile:
     mask = infile.read(1)
     blue = mask.astype(np.uint16)
 
-with rio.open(f'{file_name}/{file_name}.G.tif') as infile:
+with rio.open(f'{file_name}.G.tif') as infile:
     mask = infile.read(1)
     green = mask.astype(np.uint16)
 

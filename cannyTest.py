@@ -4,12 +4,12 @@ import cv2
 from PIL import Image
 
 # Read image
-img = cv2.imread("data/ackerman.jpg") # Reads in as numpy.ndarray
+img = cv2.imread("data/firefox_logos.jpg") # Reads in as numpy.ndarray
 height, width, channels = img.shape
 
 print(type(img))
 
-img = cn.to_greyscale(img)
+cn.to_greyscale(img)
 
 im = Image.fromarray(img)
 im.save("temp.jpg")

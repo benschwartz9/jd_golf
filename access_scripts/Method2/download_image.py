@@ -75,10 +75,8 @@ def sample(collection, time_range, area):
     collection = ee.ImageCollection(collection)
 
     ## Filter by time range and location
-
     collection_time = collection.filterDate(time_range[0], time_range[1])
     image_area = collection_time.filterBounds(area)
-
     #true_color = image_area.select(['R', 'G', 'B'])        #choose which bands you want to return
     return image_area.first() #true_color.median()
 
