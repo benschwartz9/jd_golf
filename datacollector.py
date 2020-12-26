@@ -31,18 +31,23 @@ ee.Initialize()
 def getImage(parameters, printInfo=False):
     img_set = ee.ImageCollection(parameters.ImageCollection)\
         .filterDate('2014-07-03', '2020-01-01')\
-        .filterBounds(ee.Geometry.Point(-86.92731360218038, 40.43057783316105))\
+        .filterBounds(ee.Geometry.Point(parameters.CenterX, parameters.CenterY))\
         .sort('CLOUD_COVER')
-        
+        #.filterBounds(ee.Geometry.Point(-86.92731360218038, 40.43057783316105))\
 
     if printInfo:
         print("The image collection is: " + parameters.ImageCollection)
+        print("Center: " + str(parameters.CenterX) + ", " + str(parameters.CenterY))
         print("There are {} images from this point".format(img_set.size().getInfo()))
         print("The selected bands are: " + parameters.Band1 + ', ' + parameters.Band2 + ', ' + parameters.Band3)
         print("The selected region is called: " + parameters.FileName)
         print("Its points are: " + parameters.Coordinates)
 
+    if img_set.size().getInfo() == 0:
+        return None
+
     single_image = ee.Image(img_set.first()).select(parameters.Band1, parameters.Band2, parameters.Band3)
+
     return single_image
 
 
@@ -55,7 +60,11 @@ def printParameters(parameters):
     print(f"File Name: {parameters.FileName}")
 
 
-def getDownloadURL(parameters, single_image):
+def printDownloadURL(parameters, single_image):
+    if not single_image:
+        print(f"Unable to find image for {parameters.FileName}, {parameters.Coordinates}")
+        return
+
     url = single_image.getDownloadURL({
         'name': (parameters.FileName + str(datetime.utcnow())),
         'scale': parameters.Scale,
@@ -63,16 +72,21 @@ def getDownloadURL(parameters, single_image):
         'region': parameters.Coordinates
     })
 
-    return url
+    print(url)
 
 
 def exportToDrive(parameters, single_image, printSubmission=False):
+    if not single_image:
+        if printSubmission:
+            print(f"Unable to find image for {parameters.FileName}, {parameters.Coordinates}")
+        return
+
     DriveTask = ee.batch.Export.image.toDrive(**{
             'image': single_image,
             'description': parameters.FileName + "_" + str(datetime.utcnow()),
             'scale': parameters.Scale,
             'crs': 'EPSG:3857',
-            'region': parameters.Coordinates,
+            'region': parameters.Coordinates, #single_image.geometry().bounds().getInfo()['coordinates'],
             'folder': parameters.Folder
         })
     
@@ -81,3 +95,5 @@ def exportToDrive(parameters, single_image, printSubmission=False):
     if printSubmission:
         print(f"Submitted exportToDrive task: {parameters.FileName}, {parameters.Coordinates}")
     
+
+

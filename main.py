@@ -13,7 +13,9 @@ class DownloadImageryParameters:
         self.Band1 = 'R'
         self.Band2 = 'G'
         self.Band3 = 'B'
-        self.Scale = 1
+        self.Scale = 10
+        self.CenterX = -86.93206344262272
+        self.CenterY = 40.43042934882771
 
         # Google Drive
         self.Folder = 'Google Earth'
@@ -26,7 +28,8 @@ def unpack(file):
     while True:
         line = file.readline()
         if not line or line == "\n":
-            yield filename[:-1], "[[" + "],[".join(coords) + "]]"
+            centerX, centerY = float(coords[0][:coords[0].index(",")]), float(coords[0][coords[0].index(",") + 1:])
+            yield filename[:-1], centerX, centerY, "[[" + "],[".join(coords[1:]) + "]]"
             if not line:
                 break
             filename = file.readline()
@@ -38,12 +41,28 @@ def unpack(file):
 # Main
 param = DownloadImageryParameters()
 
+i = 0
+
 with open("courses.txt", "r") as file:
-    for filename, coords in unpack(file):
+    for filename, centerX, centerY, coords in unpack(file):
+        
+        i += 1
+        if i <= 2625+3000+3000+3000+3000:
+            continue
+
         # Reconfigure
         param.FileName = filename
+        param.CenterX = centerX
+        param.CenterY = centerY
         param.Coordinates = coords
 
         # Run collection process
-        img = datacollector.getImage(param)
+        img = datacollector.getImage(param, False)
+        #datacollector.printDownloadURL(param, img)
         datacollector.exportToDrive(param, img, printSubmission=True)
+
+# earthengine task cancel all
+# earthengine task list
+
+# Took 9 hrs to do ~2k at scale of 10
+# Set-ExecutionPolicy Unrestricted -Scope Process

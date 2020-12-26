@@ -1,1 +1,5 @@
 venv/
+annotations/to_sort/
+annotations/tif_files/
+annotations/keep/
+annotations/delete/
