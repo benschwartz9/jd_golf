@@ -13,7 +13,7 @@ class DownloadImageryParameters:
         self.Band1 = 'R'
         self.Band2 = 'G'
         self.Band3 = 'B'
-        self.Scale = 10
+        self.Scale = 1
         self.CenterX = -86.93206344262272
         self.CenterY = 40.43042934882771
 
@@ -43,12 +43,15 @@ param = DownloadImageryParameters()
 
 i = 0
 
-with open("courses.txt", "r") as file:
+with open("annotations/new_courses_backup.txt", "r") as file:
     for filename, centerX, centerY, coords in unpack(file):
         
         i += 1
-        if i <= 2625+3000+3000+3000+3000:
+        if i <= 200+124:
             continue
+
+        if i > 400+124:
+            break
 
         # Reconfigure
         param.FileName = filename
