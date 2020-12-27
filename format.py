@@ -70,34 +70,21 @@ with open("annotations/new_courses_backup.txt", "r") as f:
         # else:
         #     print(filename)
 
-print(keep_files)
-print()
 
 writeLeft = 0
 ignore = False
-firstLine = True
 
-with open("temp.txt", "r") as infile:
+with open("base_courses.txt", "r") as infile:
     with open("keep_courses_restof.txt", "w") as outfile:
-        for line in infile.readlines():
-            if firstLine:
-                line = line[2:]
-                firstLine = False
-            
-            if ignore:
-                continue
-            ignore = not ignore
+        for line in infile.readlines():            
+            # if ignore:
+            #     continue
+            # ignore = not ignore
 
-            print(len(line[:-1]))
-            print(line[:-1])
-            print(line[:-1] in keep_files)
-            print(line[:-1] == "Coopers Hawk-Melbourne,AR")
-            print(len("Coopers Hawk-Melbourne,AR"))
             if writeLeft > 0:
                 outfile.write(line)
                 writeLeft -= 1
             elif line[:-1] in keep_files:
-                print(3)
                 outfile.write(line)
                 writeLeft = 7        
 
